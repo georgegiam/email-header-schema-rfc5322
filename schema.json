@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Email Header JSON Schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["date", "from", "message-id"],
+  "properties": {
+    "from": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string", "format": "email" }
+            },
+            "required": ["email"],
+            "additionalProperties": false
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" }
+          },
+          "required": ["email"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "to": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string", "format": "email" }
+            },
+            "required": ["email"],
+            "additionalProperties": false
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" }
+          },
+          "required": ["email"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "cc": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string", "format": "email" }
+            },
+            "required": ["email"],
+            "additionalProperties": false
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" }
+          },
+          "required": ["email"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "bcc": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string", "format": "email" }
+            },
+            "required": ["email"],
+            "additionalProperties": false
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" }
+          },
+          "required": ["email"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "reply-to": {
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "email": { "type": "string", "format": "email" }
+            },
+            "required": ["email"],
+            "additionalProperties": false
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": { "type": "string", "format": "email" }
+          },
+          "required": ["email"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "subject": { "type": "string" },
+    "date": { "type": "string", "format": "date-time" },
+    "message-id": {
+      "type": "string",
+      "pattern": "^<[^<>@\\s]+@[^<>@\\s]+>$"
+    },
+    "in-reply-to": { "type": "string" },
+    "references": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      ]
+    },
+    "mime-version": { "type": "string" },
+    "content-type": { "type": "string" },
+    "content-transfer-encoding": { "type": "string" },
+    "received": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      ]
+    },
+    "x_headers": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

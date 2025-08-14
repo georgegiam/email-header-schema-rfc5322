@@ -1,142 +1,70 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Email Header JSON Schema",
+  "title": "RFC 5322 Email Header Schema",
   "type": "object",
-  "additionalProperties": false,
-  "required": ["date", "from", "message-id"],
   "properties": {
     "from": {
       "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "email": {
+              "type": "string",
+              "pattern": "^(?:[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}|\\[(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\\])$"
+            }
+          },
+          "required": ["email"]
+        },
         {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
               "name": { "type": "string" },
-              "email": { "type": "string", "format": "email" }
+              "email": {
+                "type": "string",
+                "pattern": "^(?:[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z]{2,}|\\[(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\\])$"
+              }
             },
-            "required": ["email"],
-            "additionalProperties": false
+            "required": ["email"]
           }
-        },
-        {
-          "type": "object",
-          "properties": {
-            "name": { "type": "string" },
-            "email": { "type": "string", "format": "email" }
-          },
-          "required": ["email"],
-          "additionalProperties": false
         }
       ]
     },
-    "to": {
-      "oneOf": [
-        {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string" },
-              "email": { "type": "string", "format": "email" }
-            },
-            "required": ["email"],
-            "additionalProperties": false
-          }
-        },
-        {
-          "type": "object",
-          "properties": {
-            "name": { "type": "string" },
-            "email": { "type": "string", "format": "email" }
-          },
-          "required": ["email"],
-          "additionalProperties": false
-        }
-      ]
-    },
-    "cc": {
-      "oneOf": [
-        {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string" },
-              "email": { "type": "string", "format": "email" }
-            },
-            "required": ["email"],
-            "additionalProperties": false
-          }
-        },
-        {
-          "type": "object",
-          "properties": {
-            "name": { "type": "string" },
-            "email": { "type": "string", "format": "email" }
-          },
-          "required": ["email"],
-          "additionalProperties": false
-        }
-      ]
-    },
-    "bcc": {
-      "oneOf": [
-        {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string" },
-              "email": { "type": "string", "format": "email" }
-            },
-            "required": ["email"],
-            "additionalProperties": false
-          }
-        },
-        {
-          "type": "object",
-          "properties": {
-            "name": { "type": "string" },
-            "email": { "type": "string", "format": "email" }
-          },
-          "required": ["email"],
-          "additionalProperties": false
-        }
-      ]
-    },
-    "reply-to": {
-      "oneOf": [
-        {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string" },
-              "email": { "type": "string", "format": "email" }
-            },
-            "required": ["email"],
-            "additionalProperties": false
-          }
-        },
-        {
-          "type": "object",
-          "properties": {
-            "name": { "type": "string" },
-            "email": { "type": "string", "format": "email" }
-          },
-          "required": ["email"],
-          "additionalProperties": false
-        }
-      ]
-    },
+    "to": { "$ref": "#/properties/from" },
+    "cc": { "$ref": "#/properties/from" },
+    "bcc": { "$ref": "#/properties/from" },
+    "reply-to": { "$ref": "#/properties/from" },
+
     "subject": { "type": "string" },
-    "date": { "type": "string", "format": "date-time" },
+
+    "date": {
+      "type": "string",
+      "oneOf": [
+        {
+          "pattern": "^(Mon|Tue|Wed|Thu|Fri|Sat|Sun),?\\s\\d{1,2}\\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\s\\d{4}\\s\\d{2}:\\d{2}(?::\\d{2})?\\s([+-]\\d{4}|UT|GMT|[A-Z]{1,3})$"
+        },
+        {
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$"
+        }
+      ]
+    },
     "message-id": {
       "type": "string",
       "pattern": "^<[^<>@\\s]+@[^<>@\\s]+>$"
     },
-    "in-reply-to": { "type": "string" },
+
+    "in-reply-to": {
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      ]
+    },
     "references": {
       "oneOf": [
         { "type": "string" },
@@ -146,9 +74,11 @@
         }
       ]
     },
+
     "mime-version": { "type": "string" },
     "content-type": { "type": "string" },
     "content-transfer-encoding": { "type": "string" },
+
     "received": {
       "oneOf": [
         { "type": "string" },
@@ -158,9 +88,25 @@
         }
       ]
     },
-    "x_headers": {
-      "type": "object",
-      "additionalProperties": { "type": "string" }
-    }
+
+    "resent-from": { "$ref": "#/properties/from" },
+    "resent-to": { "$ref": "#/properties/from" },
+    "resent-cc": { "$ref": "#/properties/from" },
+    "resent-bcc": { "$ref": "#/properties/from" },
+    "resent-date": { "$ref": "#/properties/date" },
+    "resent-message-id": { "$ref": "#/properties/message-id" }
+  },
+  "additionalProperties": {
+    "oneOf": [
+      { "type": "string" },
+      {
+        "type": "array",
+        "items": { "type": "string" }
+      },
+      {
+        "type": "object",
+        "additionalProperties": { "type": "string" }
+      }
+    ]
   }
 }
